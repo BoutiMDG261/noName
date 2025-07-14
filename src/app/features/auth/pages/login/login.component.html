@@ -1,0 +1,51 @@
+<div class="w-full max-w-md lg:max-w-lg mx-auto mt-24 px-4">
+    <div class="border border-slate-200 shadow-2xl rounded-xl p-8 bg-white">
+        <h2 class="text-3xl font-bold text-center uppercase mb-8 text-slate-700">Login</h2>
+
+        @if (error()?.message) {
+        <p-message severity="error" icon="pi pi-times-circle" styleClass="mb-2">{{ error()?.message }}</p-message>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+
+            <!-- Email -->
+            <div class="flex flex-col gap-1">
+                <label for="email" class="text-sm font-medium text-slate-600">Email</label>
+                <input id="email" formControlName="email" type="email" pInputText placeholder="you@example.com"
+                    class="w-full" />
+                @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                <small class="text-red-500" @errorSlide>
+                    Email is required
+                </small>
+                }
+                @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+                <small class="text-red-500" @errorSlide>
+                    Invalid email format
+                </small>
+                }
+            </div>
+
+            <!-- Password -->
+            <div class="flex flex-col gap-1">
+                <label for="password" class="text-sm font-medium text-slate-600">Password</label>
+                <p-password id="password" formControlName="password" [toggleMask]="true"
+                    placeholder="Enter your password" inputStyleClass="w-full" styleClass="w-full" [feedback]="false"
+                    autocomplete="current-password"></p-password>
+                @if (form.get('password')?.invalid && form.get('password')?.touched) {
+                <small class="text-red-500" @errorSlide>
+                    Password is required
+                </small>
+                }
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" pButton pRipple [severity]="'primary'" [raised]="true" [loading]="loading()"
+                [disabled]="form.invalid" class="mt-4">
+                @if (!loading()) {
+                <span pButtonLabel>Connect</span>
+                }
+            </button>
+
+        </form>
+    </div>
+</div>
