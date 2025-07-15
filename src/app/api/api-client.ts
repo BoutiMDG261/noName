@@ -201,8 +201,16 @@ export class UserClient {
         return _observableOf(null as any);
     }
 
-    getUsers(): Observable<ApiResponseOfIEnumerableOfUserDto> {
-        let url_ = this.baseUrl + "/api/user";
+    getUsers(pageNumber: number | undefined, pageSize: number | undefined): Observable<ApiResponseOfPaginatedListOfUserDto> {
+        let url_ = this.baseUrl + "/api/user?";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "pageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -220,14 +228,14 @@ export class UserClient {
                 try {
                     return this.processGetUsers(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ApiResponseOfIEnumerableOfUserDto>;
+                    return _observableThrow(e) as any as Observable<ApiResponseOfPaginatedListOfUserDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ApiResponseOfIEnumerableOfUserDto>;
+                return _observableThrow(response_) as any as Observable<ApiResponseOfPaginatedListOfUserDto>;
         }));
     }
 
-    protected processGetUsers(response: HttpResponseBase): Observable<ApiResponseOfIEnumerableOfUserDto> {
+    protected processGetUsers(response: HttpResponseBase): Observable<ApiResponseOfPaginatedListOfUserDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -237,7 +245,7 @@ export class UserClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ApiResponseOfIEnumerableOfUserDto;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ApiResponseOfPaginatedListOfUserDto;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -340,10 +348,20 @@ export interface ApiResponseOfUserDto {
     data: UserDto | null;
 }
 
-export interface ApiResponseOfIEnumerableOfUserDto {
+export interface ApiResponseOfPaginatedListOfUserDto {
     success: boolean;
     message: string;
-    data: UserDto[] | null;
+    data: PaginatedListOfUserDto | null;
+}
+
+export interface PaginatedListOfUserDto {
+    items: UserDto[];
+    pageIndex: number;
+    totalPages: number;
+    totalCount: number;
+    pageSize: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
 }
 
 export class ApiException extends Error {

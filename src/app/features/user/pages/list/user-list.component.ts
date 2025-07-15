@@ -1,23 +1,35 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../../../core/auth/auth.service';
+import { UserService } from '../../services/user.service';
+import { ApiResponseOfPaginatedListOfUserDto } from '../../../../api/api-client';
 
 @Component({
     selector: 'user-list-page',
-    imports: [ButtonModule],
+    imports: [],
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.scss',
 })
 export class UserListComponent implements OnInit {
-    private readonly _authService = inject(AuthService);
-
-    title = signal<string>('');
+    private readonly _userService = inject(UserService);
+    usersData = signal<ApiResponseOfPaginatedListOfUserDto | null>(null);
+    loading = signal(false);
 
     ngOnInit(): void {
-        this.title.set('Hello World !!!');
+        this.loadUsers(1, 10);
     }
 
-    logout() {
-        this._authService.logout();
+    loadUsers(pageNumber: number, pageSize: number) {
+        this.loading.set(true);
+
+        this._userService.getUsers(pageNumber, pageSize).subscribe({
+            next: (res: ApiResponseOfPaginatedListOfUserDto) => {
+                this.usersData.set(res);
+                
+                this.loading.set(false);
+            },
+            error: () => {
+                this.usersData.set(null);
+                this.loading.set(false);
+            }
+        });
     }
 }

@@ -1,0 +1,10 @@
+<div class="w-64 bg-white h-screen p-6 shadow flex flex-col">
+    <!-- Zone utilisateur -->
+    <div class="mb-6 border-b pb-4 flex flex-col items-center">
+        <h2 class="text-lg font-semibold text-gray-800 mb-1">{{ fulname() }}</h2>
+        <p-button (onClick)="logout()" label="Se deconnecter" variant="text" severity="info" icon="pi pi-sign-out" size="small" />
+    </div>
+
+    <!-- Menu de navigation -->
+    <p-panelMenu [model]="items" [style]="{ width: '100%' }"></p-panelMenu>
+</div>

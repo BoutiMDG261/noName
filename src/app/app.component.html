@@ -1,1 +1,11 @@
-<router-outlet />
+@if (isConnected()) {
+<div class="flex">
+    <panel-menu-page></panel-menu-page>
+    <main class="flex-1 p-6">
+        <router-outlet></router-outlet>
+    </main>
+</div>
+}
+@else {
+<router-outlet></router-outlet>
+}

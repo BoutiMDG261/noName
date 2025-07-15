@@ -3,13 +3,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
-import { AuthService } from '../../../../core/auth/auth.service';
-import { LoginRequest } from '../../../../api/api-client';
+import { ApiResponseOfLoginResponse, LoginRequest } from '../../../../api/api-client';
 import { PasswordModule } from 'primeng/password';
 import { Message } from 'primeng/message';
 import { IError } from '../../../../shared/interfaces/error.interface';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
     selector: 'login-page',
@@ -52,10 +52,10 @@ export class LoginComponent {
         const loginData = this.form.value as LoginRequest;
 
         this._authService.login(loginData).subscribe({
-            next: (res) => {
+            next: (res: ApiResponseOfLoginResponse) => {
                 this.loading.set(false);
                 if (res && res.data?.token) {
-                    this._authService.saveToken(res.data.token);
+                    this._authService.saveDataUser(res.data);
                     console.log('Connexion réussie');
                     this.error.set(null); // ✅ réinitialise l'erreur
                     // Ici tu peux naviguer ou autre

@@ -136,12 +136,30 @@
           "application/json",
           "text/json"
         ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "pageNumber",
+            "in": "query",
+            "format": "int32",
+            "default": 1,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          }
+        ],
         "responses": {
           "200": {
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ApiResponseOfIEnumerableOfUserDto"
+              "$ref": "#/definitions/ApiResponseOfPaginatedListOfUserDto"
             }
           }
         }
@@ -310,7 +328,7 @@
         }
       }
     },
-    "ApiResponseOfIEnumerableOfUserDto": {
+    "ApiResponseOfPaginatedListOfUserDto": {
       "type": "object",
       "required": [
         "success",
@@ -324,10 +342,49 @@
           "type": "string"
         },
         "data": {
+          "$ref": "#/definitions/PaginatedListOfUserDto"
+        }
+      }
+    },
+    "PaginatedListOfUserDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "pageIndex",
+        "totalPages",
+        "totalCount",
+        "pageSize",
+        "hasPreviousPage",
+        "hasNextPage"
+      ],
+      "properties": {
+        "items": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/UserDto"
           }
+        },
+        "pageIndex": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hasPreviousPage": {
+          "type": "boolean"
+        },
+        "hasNextPage": {
+          "type": "boolean"
         }
       }
     }

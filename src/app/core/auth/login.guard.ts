@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
-import { AuthService } from "./auth.service";
 import { Router } from "@angular/router";
+import { AuthService } from "./auth.service";
 
 export const LoginGuard = () => {
     const _authService = inject(AuthService);
