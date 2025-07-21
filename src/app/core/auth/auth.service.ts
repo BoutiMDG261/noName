@@ -1,7 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { AuthClient, LoginRequest, LoginResponse } from '../../api/api-client';
 import { Router } from '@angular/router';
-import { IUseLogin } from '../../features/user/interfaces/user-login.interface';
 
 @Injectable({
   providedIn: 'root'

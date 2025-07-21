@@ -1,35 +1,27 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { ApiResponseOfPaginatedListOfUserDto } from '../../../../api/api-client';
-
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { UsersStore } from '../../store/user.store';
+import { UserDto } from '../../../../api/api-client';
 @Component({
     selector: 'user-list-page',
-    imports: [],
+    imports: [TableModule, ButtonModule],
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.scss',
 })
 export class UserListComponent implements OnInit {
-    private readonly _userService = inject(UserService);
-    usersData = signal<ApiResponseOfPaginatedListOfUserDto | null>(null);
+    readonly _userStore = inject(UsersStore);
     loading = signal(false);
 
     ngOnInit(): void {
-        this.loadUsers(1, 10);
+        this._userStore.loadUsers();
     }
 
-    loadUsers(pageNumber: number, pageSize: number) {
-        this.loading.set(true);
+    get users(): UserDto[] {
+        return this._userStore.data()?.items || [];
+    }
 
-        this._userService.getUsers(pageNumber, pageSize).subscribe({
-            next: (res: ApiResponseOfPaginatedListOfUserDto) => {
-                this.usersData.set(res);
-                
-                this.loading.set(false);
-            },
-            error: () => {
-                this.usersData.set(null);
-                this.loading.set(false);
-            }
-        });
+    refreshList() {
+        this._userStore.loadUsers();
     }
 }

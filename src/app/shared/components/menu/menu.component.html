@@ -1,0 +1,27 @@
+<!-- Bouton burger visible sur mobile -->
+<div class="p-4">
+    <button (click)="sidebarVisible = true" class="text-gray-800 hover:text-black hover:cursor-pointer">
+        <i class="pi pi-bars text-2xl"></i>
+    </button>
+</div>
+
+<!-- Sidebar responsive -->
+<p-drawer [(visible)]="sidebarVisible" [closable]="false">
+    <!-- en-tete -->
+    <ng-template pTemplate="header">
+        <div class="w-full flex justify-center">
+            <p class="font-semibold text-2xl">{{ fulname() }}</p>
+        </div>
+    </ng-template>
+
+    <!-- Les labels menu dispos -->
+    <panel-menu-page></panel-menu-page>
+
+    <!-- peid du menu -->
+    <ng-template #footer>
+        <div class="flex justify-center">
+            <p-button (onClick)="logout()" label="Se deconnecter" variant="text" severity="danger"
+                icon="pi pi-sign-out" />
+        </div>
+    </ng-template>
+</p-drawer>

@@ -3,20 +3,17 @@ import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../core/auth/auth.service';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
     selector: 'panel-menu-page',
-    imports: [ButtonModule, PanelMenuModule],
+    imports: [ButtonModule, PanelMenuModule, DividerModule],
     templateUrl: './panel-menu.component.html',
     styleUrl: './panel-menu.component.scss',
 })
 export class PanelMenuComponent implements OnInit {
     private readonly _authService = inject(AuthService);
 
-    fulname = computed(() => {
-        const dataUser = this._authService.getDataUser();
-        return dataUser ? `Salut ${dataUser.user.name}` : '';
-    });
     items: MenuItem[] = [];
 
     ngOnInit() {
@@ -37,9 +34,5 @@ export class PanelMenuComponent implements OnInit {
                 routerLink: '/settings'
             }
         ];
-    }
-
-    logout() {
-        this._authService.logout();
     }
 }
